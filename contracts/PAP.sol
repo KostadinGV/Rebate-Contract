@@ -244,7 +244,7 @@ interface IUniswapV2Pair {
     function initialize(address, address) external;
 }
 
-contract PAP is Ownable {
+contract PAMP is Ownable {
 
     struct Asset {
         bool isAdded;
@@ -316,7 +316,7 @@ contract PAP is Ownable {
     // Only allow a function to be called with a bondable asset
 
     modifier onlyAsset(address token) {
-        require(assets[token].isAdded, "PAP: token is not a bondable asset");
+        require(assets[token].isAdded, "PAMP: token is not a bondable asset");
         _;
     }
 
@@ -337,10 +337,10 @@ contract PAP is Ownable {
 
     function bond(address token, uint256 amount) external onlyAsset(token) {
         updateTier();
-        require(amount > 0, "PAP: invalid bond amount");
+        require(amount > 0, "PAMP: invalid bond amount");
         uint256 pblAmount = getPblReturn(token, amount);
-        require(Pbl.balanceOf(address(this))>= limit, "PAP: insufficient pbl balance");
-        require(limit >= totalVested && pblAmount <= limit - totalVested, "PAP: insufficient limit");
+        require(Pbl.balanceOf(address(this))>= limit, "PAMP: insufficient pbl balance");
+        require(limit >= totalVested && pblAmount <= limit - totalVested, "PAMP: insufficient limit");
 
         IERC20(token).transferFrom(msg.sender, treasury, amount);
         _claimVested(msg.sender);
